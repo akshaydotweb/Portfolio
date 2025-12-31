@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshay | Security Researcher & Developer</title>
+    <meta name="description" content="Portfolio of Akshay, a security-focused developer specializing in vulnerability assessment, penetration testing, and secure system design.">
+    
+   <!-- Google Fonts: Space Grotesk (Display), Manrope (Body), Space Mono (Tech/Accents) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Space+Grotesk:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --bg-color: #f4f4f5; /* Slightly cooler, techy grey */
+            --surface-color: #ffffff;
+            --text-main: #09090b; /* Zinc 950 - Almost Black */
+            --text-muted: #52525b;
+            --accent-color: #2563eb; /* Tech Blue */
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --border-color: #e4e4e7;
+            
+            /* New Font Variables */
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 8rem;
+
+            --container-width: 1200px;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* Snappier tech feel */
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- Utility Classes --- */
+        .container {
+            width: 90%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: var(--surface-color);
+            border: 1px solid var(--text-main);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--text-main);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-main);
+            color: var(--surface-color);
+        }
+
+        /* --- Header / Navigation --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(249, 249, 249, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1.25rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 180px;
+            padding-bottom: 120px;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-eyebrow {
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* --- About Section --- */
+        .about {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--surface-color);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .skills-container {
+            margin-top: 2rem;
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background-color: var(--bg-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            /* Minimal subtle shadow */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+        }
+
+        /* --- Projects Section --- */
+        .projects {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+            border-color: var(--border-color);
+        }
+
+        .project-image-wrapper {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .project-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card:hover .project-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-category {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .project-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-link {
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .project-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover i {
+            transform: translateX(4px);
+        }
+
+        /* --- Contact Section --- */
+        .contact {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--surface-color);
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h2 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .contact-details {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .contact-item i {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            background-color: var(--surface-color);
+            box-shadow: 0 0 0 4px rgba(45, 85, 255, 0.05);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-link {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 968px) {
+            .hero h1 { font-size: 3.5rem; }
+            .about-grid, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+            .about-image { order: -1; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; z-index: 1001; }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: var(--surface-color);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+            }
+
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.5rem; }
+            
+            .hero { padding-top: 140px; text-align: center; }
+            .hero-content { margin: 0 auto; }
+            .hero-actions { justify-content: center; }
+            .contact-info h2 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.8rem; }
+            .btn { width: 100%; justify-content: center; }
+            .hero-actions { flex-direction: column; }
+        }
+
+        /* --- Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Akshay V</a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#about" onclick="closeMenu()">About</a></li>
+                    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+                    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+                    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">
+                    <i class="ph ph-list"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content reveal">
+                    <span class="hero-eyebrow">Security Researcher & Developer</span>
+                    <h1>Securing digital infrastructure through innovation & expertise.</h1>
+                    <p>Specialized in vulnerability assessment, penetration testing, and threat modeling. Building secure architectures and identifying attack vectors to protect critical systems.</p>
+                    <div class="hero-actions">
+                        <a href="#projects" class="btn btn-primary">View Projects <i class="ph ph-arrow-down"></i></a>
+                        <a href="#contact" class="btn btn-outline">Contact Me</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text reveal">
+                        <h2 class="section-title">About Me</h2>
+                        <p>I'm Akshay, a security-focused developer with a Bachelor of Technology in Computer Science and Engineering from PES University. I specialize in identifying and mitigating security vulnerabilities through systematic testing, threat modeling, and secure system design.</p>
+                        <p>With expertise in penetration testing, vulnerability assessment, and secure system design, I help organizations build resilient infrastructure. My approach combines analytical rigor with hands-on security testing to uncover and address critical security gaps before they become liabilities.</p>
+                        
+                        <div class="skills-container">
+                            <div class="skill-category">
+                                <h4>Cybersecurity & Testing</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">Penetration Testing</span>
+                                    <span class="tag">Vulnerability Assessment</span>
+                                    <span class="tag">Threat Modeling</span>
+                                    <span class="tag">Burp Suite</span>
+                                    <span class="tag">Security Testing</span>
+                                    <span class="tag">Risk Analysis</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h4>Backend & Infrastructure</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">Node.js</span>
+                                    <span class="tag">Express</span>
+                                    <span class="tag">Python</span>
+                                    <span class="tag">PostgreSQL</span>
+                                    <span class="tag">Docker</span>
+                                    <span class="tag">AWS</span>
+                                    <span class="tag">Linux</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h4>Compliance & Standards</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">OWASP</span>
+                                    <span class="tag">Cloud Security</span>
+                                    <span class="tag">Network Security</span>
+                                    <span class="tag">Secure Coding</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image reveal">
+                        <!-- Using a high quality placeholder for a cybersecurity professional -->
+                        <!-- <img src="https://picsum.photos/seed/cybersecurity/600/700" alt="Akshay, cybersecurity expert" width="600" height="700"> -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="about">
+            <div class="container">
+                <div class="reveal" style="margin-bottom: 3rem;">
+                    <h2 class="section-title">Experience</h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 2.5rem;">
+                    <!-- Experience 1 -->
+                    <div class="reveal">
+                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
+                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Bug Bounty Hunter</h3>
+                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">Medstar2000 • Remote • Feb 2023</p>
+                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
+                                <li>Identified and responsibly disclosed high-severity XSS vulnerability in production web application through systematic security testing</li>
+                                <li>Conducted comprehensive threat modeling of web applications to identify attack vectors and business risk implications</li>
+                                <li>Leveraged Burp Suite and penetration testing tools for application security assessment and security control review</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Experience 2 -->
+                    <div class="reveal">
+                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
+                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Research Intern</h3>
+                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">CAVE Labs • Bengaluru • Jun 2025 - Jul 2025</p>
+                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
+                                <li>Integrated VR simulations with headsets, optimizing terrain rendering and hardware compatibility</li>
+                                <li>Improved rendering efficiency by 25%, reducing latency for immersive experiences</li>
+                                <li>Achieved 100% compatibility with VR devices through seamless hardware integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects">
+            <div class="container">
+                <div class="reveal">
+                    <h2 class="section-title">Featured Projects</h2>
+                </div>
+                
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <!-- <img src="https://picsum.photos/seed/network/800/600" alt="Campus Network Security"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category">Network Architecture</span>
+                            <h3 class="project-title">Campus Network Security</h3>
+                            <p class="project-desc">Enterprise-scale network architecture with optimized routing, ACLs, VLANs, and network segmentation. Designed for redundancy, failover mechanisms, and multi-site deployment.</p>
+                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <!-- <img src="https://picsum.photos/seed/security/800/600" alt="Mail Box Platform"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category">Secure Web App</span>
+                            <h3 class="project-title">Mail Box Platform</h3>
+                            <p class="project-desc">Secure web application with RESTful APIs, encrypted credential storage, session management, and AWS S3 integration for multi-user data security.</p>
+                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <!-- <img src="https://picsum.photos/seed/blockchain/800/600" alt="Asteroid Decentralized Storage"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category">Distributed Systems</span>
+                            <h3 class="project-title">Asteroid – P2P Storage</h3>
+                            <p class="project-desc">Decentralized storage system combining IPFS with on-chain metadata. Implemented with Docker microservices, wallet-based authentication, and distributed trust model.</p>
+                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-layout">
+                    <div class="contact-info reveal">
+                        <h2>Let's secure your systems.</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">Available for security consulting, penetration testing engagements, and security architecture projects.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="ph ph-envelope-simple"></i>
+                                <a href="mailto:akshayvmudaliar@gmail.com">akshayvmudaliar@gmail.com</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="ph ph-map-pin"></i>
+                                <span>Bengaluru, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Thanks for the message! This is a demo form.');">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="jane@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" placeholder="Tell me about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter"><i class="ph ph-twitter-logo"></i></a>
+                <a href="#" class="social-link" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+                <a href="#" class="social-link" aria-label="Dribbble"><i class="ph ph-dribbble-logo"></i></a>
+                <a href="#" class="social-link" aria-label="GitHub"><i class="ph ph-github-logo"></i></a>
+            </div>
+            <p class="copyright">&copy; 2025 Akshay. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Minimal JavaScript for Interactions -->
+    <script>
+        // Mobile Menu Toggle
+        const navLinks = document.getElementById('navLinks');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const icon = mobileMenuBtn.querySelector('i');
+
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            
+            // Toggle Icon between List and X
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('ph-list');
+                icon.classList.add('ph-x');
+            } else {
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            }
+        }
+
+        function closeMenu() {
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            }
+        }
+
+        // Scroll Reveal Animation using Intersection Observer
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15, // Trigger when 15% of element is visible
+            rootMargin: "0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Smooth Scroll for Anchor Links (Backup for browsers without CSS support)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Calculate header offset
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,2 +1,0 @@
-New portfolio
-accessing account

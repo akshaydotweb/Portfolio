@@ -59,6 +59,7 @@
             scroll-behavior: smooth;
             font-size: 16px;
         }
+        
 
         body {
             background-color: var(--bg-color);
@@ -189,7 +190,7 @@
             width: 100%;
             z-index: 1000;
             background: rgba(249, 249, 249, 0.85);
-            backdrop-filter: blur(10px);
+            /* backdrop-filter: blur(10px); */
             border-bottom: 1px solid rgba(0,0,0,0.05);
             padding: 1.25rem 0;
         }
@@ -339,14 +340,30 @@
             border-radius: 4px;
             font-size: 0.9rem;
             color: var(--text-muted);
-            border: 1px solid transparent;
-            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+            transition: color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle 400px at var(--mouse-x) var(--mouse-y), var(--accent-color) 0%, transparent 80%);
+            border-radius: 4px;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .tag:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+            color: var(--surface-color);
             transform: translateY(-2px);
+            cursor: none;
         }
 
         .about-image {
@@ -982,6 +999,38 @@
         });
 
         revealElements.forEach(el => revealObserver.observe(el));
+
+        /* --- SKILL TAGS RADIAL FILL ANIMATION --- */
+        document.querySelectorAll('.tag').forEach(tag => {
+            let mouseX = tag.offsetWidth / 2;
+            let mouseY = tag.offsetHeight / 2;
+            
+            tag.addEventListener('mouseenter', () => {
+                // Reset to center on enter for smooth start
+                tag.style.setProperty('--mouse-x', '50%');
+                tag.style.setProperty('--mouse-y', '50%');
+            });
+            
+            tag.addEventListener('mousemove', (e) => {
+                const rect = tag.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+                mouseY = e.clientY - rect.top;
+                
+                const xPercent = (mouseX / rect.width) * 100;
+                const yPercent = (mouseY / rect.height) * 100;
+                
+                // Use requestAnimationFrame for smooth animation
+                requestAnimationFrame(() => {
+                    tag.style.setProperty('--mouse-x', `${xPercent}%`);
+                    tag.style.setProperty('--mouse-y', `${yPercent}%`);
+                });
+            });
+            
+            tag.addEventListener('mouseleave', () => {
+                tag.style.setProperty('--mouse-x', '50%');
+                tag.style.setProperty('--mouse-y', '50%');
+            });
+        });
 
         /* --- HERO H1 SCRAMBLE EFFECT LOGIC --- */
         const letters = "0123456789ABCDEF"; // Hexadecimal hash values

@@ -13,6 +13,9 @@
     
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Lenis for Premium Smooth Scrolling (Standard Developer Technique) -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.js"></script>
 
     <style>
         /* --- CSS Variables & Reset --- */
@@ -690,19 +693,6 @@
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr; gap: 2.5rem;">
-                    <!-- Experience 1 -->
-                    <div class="reveal">
-                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
-                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Bug Bounty Hunter</h3>
-                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">Medstar2000 • Remote • Feb 2023</p>
-                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
-                                <li>Identified and responsibly disclosed high-severity XSS vulnerability in production web application through systematic security testing</li>
-                                <li>Conducted comprehensive threat modeling of web applications to identify attack vectors and business risk implications</li>
-                                <li>Leveraged Burp Suite and penetration testing tools for application security assessment and security control review</li>
-                            </ul>
-                        </div>
-                    </div>
-
                     <!-- Experience 2 -->
                     <div class="reveal">
                         <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
@@ -712,6 +702,18 @@
                                 <li>Integrated VR simulations with headsets, optimizing terrain rendering and hardware compatibility</li>
                                 <li>Improved rendering efficiency by 25%, reducing latency for immersive experiences</li>
                                 <li>Achieved 100% compatibility with VR devices through seamless hardware integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Experience 1 -->
+                    <div class="reveal">
+                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
+                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Bug Bounty Hunter</h3>
+                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">Medstar2000 • Remote • JAN 2023 - MAR 2023</p>
+                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
+                                <li>Identified and responsibly disclosed high-severity XSS vulnerability in production web application through systematic security testing</li>
+                                <li>Conducted comprehensive threat modeling of web applications to identify attack vectors and business risk implications</li>
+                                <li>Leveraged Burp Suite and penetration testing tools for application security assessment and security control review</li>
                             </ul>
                         </div>
                     </div>
@@ -736,7 +738,7 @@
                             <span class="project-category">Network Architecture</span>
                             <h3 class="project-title">Campus Network Security</h3>
                             <p class="project-desc">Enterprise-scale network architecture with optimized routing, ACLs, VLANs, and network segmentation. Designed for redundancy, failover mechanisms, and multi-site deployment.</p>
-                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                            <!-- <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a> -->
                         </div>
                     </article>
 
@@ -749,7 +751,7 @@
                             <span class="project-category">Secure Web App</span>
                             <h3 class="project-title">Mail Box Platform</h3>
                             <p class="project-desc">Secure web application with RESTful APIs, encrypted credential storage, session management, and AWS S3 integration for multi-user data security.</p>
-                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                            <a href="https://github.com/akshaydotweb/mail-box" class="project-link">Inspect Code <i class="ph ph-code"></i></a>
                         </div>
                     </article>
 
@@ -759,10 +761,10 @@
                             <!-- <img src="https://picsum.photos/seed/blockchain/800/600" alt="Asteroid Decentralized Storage"> -->
                         </div>
                         <div class="project-info">
-                            <span class="project-category">Distributed Systems</span>
-                            <h3 class="project-title">Asteroid – P2P Storage</h3>
+                            <span class="project-category"> Blockchain Application</span>
+                            <h3 class="project-title">Asteroid – Decentralized File Storage</h3>
                             <p class="project-desc">Decentralized storage system combining IPFS with on-chain metadata. Implemented with Docker microservices, wallet-based authentication, and distributed trust model.</p>
-                            <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a>
+                            <a href="https://github.com/akshaydotweb/asteroid-ipfs" class="project-link">Inspect Code <i class="ph ph-code"></i></a>
                         </div>
                     </article>
                 </div>
@@ -964,7 +966,25 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // Smooth Scroll for Anchor Links (Backup for browsers without CSS support)
+        // Initialize Lenis for Premium Smooth Scrolling
+        const lenis = new Lenis({
+            duration: 1.2, // Smooth duration in seconds
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
+            direction: 'vertical', // 'vertical' or 'horizontal'
+            gestureDirection: 'vertical',
+            smoothWheel: true,
+            smoothTouch: false,
+            touchMultiplier: 2
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        // Smooth Scroll for Anchor Links with Lenis
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -973,14 +993,10 @@
                 
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    // Calculate header offset
-                    const headerOffset = 80;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: "smooth"
+                    lenis.scrollTo(targetElement, {
+                        offset: -80,
+                        duration: 1.2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
                     });
                 }
             });

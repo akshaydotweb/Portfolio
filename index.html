@@ -109,6 +109,17 @@
             height: 24px;
         }
 
+        /* --- INTERACTIVE TEXT EFFECT CLASS --- */
+        .scramble-effect {
+            display: inline-block;
+            transition: color 0.2s;
+            font-family: var(--font-mono);
+        }
+        
+        .scramble-effect:hover {
+            color: var(--accent-color);
+        }
+
         /* --- Utility Classes --- */
         .container {
             width: 90%;
@@ -259,11 +270,13 @@
         }
 
         .hero h1 {
-            font-family: var(--font-serif);
+            font-family: var(--font-mono);
             font-size: 4.5rem;
             line-height: 1.1;
             margin-bottom: 1.5rem;
             color: var(--text-main);
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .hero p {
@@ -603,7 +616,7 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#" class="logo">Akshay V</a>
+                <a href="#hero" class="logo">Akshay V</a>
                 <ul class="nav-links" id="navLinks">
                     <li><a href="#about" onclick="closeMenu()">About</a></li>
                     <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
@@ -619,11 +632,15 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" id="hero">
             <div class="container">
                 <div class="hero-content reveal">
                     <span class="hero-eyebrow">Security Researcher & Developer</span>
-                    <h1>Securing digital infrastructure through innovation & expertise.</h1>
+                    <h1>
+                        <span class="scramble-effect" data-value="SECURING DIGITAL">SECURING DIGITAL</span>
+                        <br>
+                        <span class="scramble-effect" data-value="INFRASTRUCTURE.">INFRASTRUCTURE.</span>
+                    </h1>
                     <p>Specialized in vulnerability assessment, penetration testing, and threat modeling. Building secure architectures and identifying attack vectors to protect critical systems.</p>
                     <div class="hero-actions">
                         <a href="#projects" class="btn btn-primary">View Projects <i class="ph ph-arrow-down"></i></a>
@@ -965,6 +982,46 @@
         });
 
         revealElements.forEach(el => revealObserver.observe(el));
+
+        /* --- HERO H1 SCRAMBLE EFFECT LOGIC --- */
+        const letters = "0123456789ABCDEF"; // Hexadecimal hash values
+        
+        function triggerScramble(element) {
+            let iteration = 0;
+            
+            // Using Space Mono ensures equal character width, preventing layout shifts
+            clearInterval(element.interval);
+            
+            element.interval = setInterval(() => {
+                element.innerText = element.innerText
+                    .split("")
+                    .map((letter, index) => {
+                        if(index < iteration) {
+                            return element.dataset.value[index];
+                        }
+                        return letters[Math.floor(Math.random() * 16)]
+                    })
+                    .join("");
+                
+                if(iteration >= element.dataset.value.length){ 
+                    clearInterval(element.interval);
+                }
+                
+                iteration += 1 / 3;
+            }, 30);
+        }
+        
+        document.querySelectorAll('.scramble-effect').forEach(element => {
+            // Trigger on page load with slight delay for staggered effect
+            setTimeout(() => {
+                triggerScramble(element);
+            }, 100);
+            
+            // Also trigger on hover for interactivity
+            element.addEventListener('mouseenter', () => {
+                triggerScramble(element);
+            });
+        });
 
         // Initialize Lenis for Premium Smooth Scrolling
         const lenis = new Lenis({

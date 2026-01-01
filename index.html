@@ -641,16 +641,58 @@
             .hero-actions { flex-direction: column; }
         }
 
-        /* --- Animations --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        /* --- Letter Swap Animation --- */
+        .letter-swap {
+            display: inline-block;
+            overflow: hidden;
+            perspective: 1000px;
         }
 
-        .reveal.active {
-            opacity: 1;
+        .letter-container {
+            position: relative;
+            display: inline-block;
+            white-space: pre;
+            min-height: 1.2em;
+        }
+
+        .letter-primary {
+            display: block;
             transform: translateY(0);
+        }
+
+        .letter-secondary {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: block;
+            transform: translateY(100%);
+        }
+
+        /* Animation state - triggered by JavaScript */
+        .letter-swap.animate .letter-primary {
+            animation: letterSwapDown 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .letter-swap.animate .letter-secondary {
+            animation: letterSwapUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes letterSwapDown {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        @keyframes letterSwapUp {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -1225,6 +1267,87 @@
                 }
             });
         });
+
+        /* --- Letter Swap Animation for Section Titles --- */
+        let letterSwapInitialized = false;
+        
+        function initLetterSwapAnimation() {
+            if (letterSwapInitialized) return; // Prevent multiple initializations
+            letterSwapInitialized = true;
+            
+            const titleElements = document.querySelectorAll('.section-title');
+            
+            titleElements.forEach(title => {
+                // Skip if already initialized
+                if (title.querySelectorAll('.letter-swap').length > 0) {
+                    return;
+                }
+                
+                const text = title.textContent;
+                title.textContent = ''; // Clear original text
+                
+                // Wrap each letter in letter-swap structure
+                text.split('').forEach((letter, index) => {
+                    const letterSwap = document.createElement('span');
+                    letterSwap.className = 'letter-swap';
+                    
+                    // Add stagger delay
+                    const staggerDelay = index * 0.03;
+                    letterSwap.style.animationDelay = `${staggerDelay}s`;
+                    
+                    const container = document.createElement('span');
+                    container.className = 'letter-container';
+                    
+                    const primary = document.createElement('span');
+                    primary.className = 'letter-primary';
+                    primary.textContent = letter;
+                    primary.style.animationDelay = `${staggerDelay}s`;
+                    
+                    const secondary = document.createElement('span');
+                    secondary.className = 'letter-secondary';
+                    secondary.textContent = letter;
+                    secondary.style.animationDelay = `${staggerDelay}s`;
+                    
+                    container.appendChild(primary);
+                    container.appendChild(secondary);
+                    letterSwap.appendChild(container);
+                    
+                    title.appendChild(letterSwap);
+                });
+                
+                // Add hover listener to trigger animation
+                title.addEventListener('mouseenter', function() {
+                    const letterSwaps = this.querySelectorAll('.letter-swap');
+                    letterSwaps.forEach(swap => {
+                        // Remove and re-add class to retrigger animation
+                        swap.classList.remove('animate');
+                        // Force reflow to restart animation
+                        void swap.offsetWidth;
+                        swap.classList.add('animate');
+                    });
+                });
+                
+                // Reset animation on mouse leave
+                title.addEventListener('mouseleave', function() {
+                    const letterSwaps = this.querySelectorAll('.letter-swap');
+                    letterSwaps.forEach(swap => {
+                        swap.classList.remove('animate');
+                        // Reset to initial state
+                        const primary = swap.querySelector('.letter-primary');
+                        const secondary = swap.querySelector('.letter-secondary');
+                        if (primary) primary.style.transform = 'translateY(0)';
+                        if (secondary) secondary.style.transform = 'translateY(100%)';
+                    });
+                });
+            });
+        }
+
+        // Initialize letter swap when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLetterSwapAnimation);
+        } else {
+            initLetterSwapAnimation();
+        }
     </script>
 </body>
 </html>

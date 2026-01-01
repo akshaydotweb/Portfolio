@@ -440,14 +440,116 @@
             width: 100%;
             height: 280px;
             overflow: hidden;
+            background: linear-gradient(110deg, #333 0.6%, #222 100%);
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .project-image-wrapper img {
+        .stars-grid {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 1px;
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+        }
+
+        .star {
+            position: relative;
+            width: 1px;
+            height: 1px;
+            background-color: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star-dot {
+            width: 1px;
+            height: 1px;
+            background-color: #666;
+            border-radius: 50%;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .star.glowing .star-dot {
+            background-color: #fff;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.8), 0 0 12px rgba(37, 99, 235, 0.5);
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star.hover-glowing .star-dot {
+            background-color: #fff;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.8), 0 0 12px rgba(37, 99, 235, 0.5);
+            animation: hoverTwinkle 2s ease-in-out forwards;
+        }
+
+        .star-glow {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(1px);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 20px rgba(37, 99, 235, 0.5);
+            animation: glowPulse 2s ease-in-out forwards;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.8);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hoverTwinkle {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.2);
+            }
+            50% {
+                transform: scale(2.5);
+            }
+            75% {
+                transform: scale(2.2);
+            }
+            100% {
+                transform: scale(1.5);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(2.2);
+            }
+        }
+
+        /* .project-image-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+            display: none; 
+        } */
 
         .project-card:hover .project-image-wrapper img {
             transform: scale(1.05);
@@ -484,8 +586,22 @@
             font-weight: 500;
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+            border: 1.5px solid var(--accent-color);
+            border-radius: 6px;
+            color: var(--accent-color);
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-link:hover {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
         }
 
         .project-link i {
@@ -878,6 +994,7 @@
                     <!-- Project 1 -->
                     <article class="project-card reveal">
                         <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
                             <!-- <img src="https://picsum.photos/seed/network/800/600" alt="Campus Network Security"> -->
                         </div>
                         <div class="project-info">
@@ -891,26 +1008,28 @@
                     <!-- Project 2 -->
                     <article class="project-card reveal">
                         <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
                             <!-- <img src="https://picsum.photos/seed/security/800/600" alt="Mail Box Platform"> -->
                         </div>
                         <div class="project-info">
                             <span class="project-category">Secure Web App</span>
                             <h3 class="project-title">Mail Box Platform</h3>
                             <p class="project-desc">Secure web application with RESTful APIs, encrypted credential storage, session management, and AWS S3 integration for multi-user data security.</p>
-                            <a href="https://github.com/akshaydotweb/mail-box" class="project-link">Inspect Code <i class="ph ph-code"></i></a>
+                            <button class="project-link" onclick="window.open('https://github.com/akshaydotweb/mail-box', '_blank')">Inspect Code <i class="ph ph-code"></i></button>
                         </div>
                     </article>
 
                     <!-- Project 3 -->
                     <article class="project-card reveal">
                         <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
                             <!-- <img src="https://picsum.photos/seed/blockchain/800/600" alt="Asteroid Decentralized Storage"> -->
                         </div>
                         <div class="project-info">
                             <span class="project-category"> Blockchain Application</span>
                             <h3 class="project-title">Asteroid – Decentralized File Storage</h3>
                             <p class="project-desc">Decentralized storage system combining IPFS with on-chain metadata. Implemented with Docker microservices, wallet-based authentication, and distributed trust model.</p>
-                            <a href="https://github.com/akshaydotweb/asteroid-ipfs" class="project-link">Inspect Code <i class="ph ph-code"></i></a>
+                            <button class="project-link" onclick="window.open('https://github.com/akshaydotweb/asteroid-ipfs', '_blank')">Inspect Code <i class="ph ph-code"></i></button>
                         </div>
                     </article>
                 </div>
@@ -1468,6 +1587,112 @@
                 letterSpan.style.animationDelay = `${index * 0.03}s`;
                 h3.appendChild(letterSpan);
             });
+        });
+
+        /* --- Glowing Stars Background Animation for Project Cards --- */
+        function initializeStarsGrid(gridElement) {
+            const stars = 108; // 18 columns × 6 rows
+            const glowingStars = new Set();
+            const wrapper = gridElement.closest('.project-image-wrapper');
+            let isHovering = false;
+            let autoGlowInterval;
+
+            function createStarElement() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const starDot = document.createElement('div');
+                starDot.className = 'star-dot';
+                star.appendChild(starDot);
+                
+                return star;
+            }
+
+            // Initialize all stars
+            for (let i = 0; i < stars; i++) {
+                gridElement.appendChild(createStarElement());
+            }
+
+            // Function to randomly glow 5 stars (auto mode)
+            function updateGlowingStars() {
+                if (isHovering) return; // Don't auto-glow while hovering
+                
+                glowingStars.clear();
+                const starElements = gridElement.querySelectorAll('.star');
+                
+                // Remove all glowing classes
+                starElements.forEach(star => star.classList.remove('glowing'));
+                
+                // Add glow effect to 5 random stars
+                for (let i = 0; i < 5; i++) {
+                    const randomIdx = Math.floor(Math.random() * stars);
+                    glowingStars.add(randomIdx);
+                    starElements[randomIdx].classList.add('glowing');
+                    
+                    // Add glow effect
+                    const glow = document.createElement('div');
+                    glow.className = 'star-glow';
+                    const delay = (randomIdx % 10) * 0.1;
+                    glow.style.animationDelay = `${delay}s`;
+                    starElements[randomIdx].appendChild(glow);
+                    
+                    // Remove glow after animation
+                    setTimeout(() => {
+                        if (glow.parentElement) glow.remove();
+                    }, 2200);
+                }
+            }
+
+            // Hover effect: glow ALL stars with scale sequence
+            function glowAllStars() {
+                isHovering = true;
+                const starElements = gridElement.querySelectorAll('.star');
+                
+                starElements.forEach((star, index) => {
+                    star.classList.remove('glowing');
+                    star.classList.add('hover-glowing');
+                    
+                    // Stagger the animation start for each star
+                    const staticDelay = index * 0.01;
+                    star.querySelector('.star-dot').style.animationDelay = `${staticDelay}s`;
+                    
+                    // Add glow effect
+                    const glow = document.createElement('div');
+                    glow.className = 'star-glow';
+                    glow.style.animationDelay = `${staticDelay}s`;
+                    star.appendChild(glow);
+                    
+                    // Remove glow after animation
+                    setTimeout(() => {
+                        if (glow.parentElement) glow.remove();
+                    }, 2200);
+                });
+            }
+
+            function stopGlowAllStars() {
+                isHovering = false;
+                const starElements = gridElement.querySelectorAll('.star');
+                starElements.forEach(star => {
+                    star.classList.remove('hover-glowing');
+                });
+                // Restart auto glow
+                updateGlowingStars();
+            }
+
+            // Add hover listeners
+            if (wrapper) {
+                wrapper.addEventListener('mouseenter', glowAllStars);
+                wrapper.addEventListener('mouseleave', stopGlowAllStars);
+            }
+
+            // Start auto glow interval
+            autoGlowInterval = setInterval(updateGlowingStars, 3000);
+            updateGlowingStars(); // Initial call
+        }
+
+        // Initialize stars for each project card
+        document.querySelectorAll('.stars-grid').forEach(grid => {
+            initializeStarsGrid(grid);
         });
     </script>
 </body>

@@ -59,7 +59,6 @@
             scroll-behavior: smooth;
             font-size: 16px;
         }
-        
 
         body {
             background-color: var(--bg-color);
@@ -108,17 +107,6 @@
         body.hovering .cursor-dot {
             width: 24px;
             height: 24px;
-        }
-
-        /* --- INTERACTIVE TEXT EFFECT CLASS --- */
-        .scramble-effect {
-            display: inline-block;
-            transition: color 0.2s;
-            font-family: var(--font-mono);
-        }
-        
-        .scramble-effect:hover {
-            color: var(--accent-color);
         }
 
         /* --- Utility Classes --- */
@@ -190,7 +178,7 @@
             width: 100%;
             z-index: 1000;
             background: rgba(249, 249, 249, 0.85);
-            /* backdrop-filter: blur(10px); */
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0,0,0,0.05);
             padding: 1.25rem 0;
         }
@@ -252,12 +240,56 @@
             padding-top: 180px;
             padding-bottom: 120px;
             min-height: 90vh;
+            background-color: rgba(255, 255, 255, 0.75);
             display: flex;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hero Background with Random Characters */
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .hero-char {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 15vw;
+            font-weight: 700;
+            color: hsla(0, 0%, 100%, 0.05);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.108); 
+            line-height: 1;
+            white-space: nowrap;
+            user-select: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 1%;
+        }
+
+        .hero-char.activated {
+            color: #0051ff;
+            opacity: 1;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
         }
 
         .hero-content {
             max-width: 800px;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.051);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            
         }
 
         .hero-eyebrow {
@@ -276,8 +308,20 @@
             line-height: 1.1;
             margin-bottom: 1.5rem;
             color: var(--text-main);
+            text-transform: uppercase;
             font-weight: 700;
             letter-spacing: -0.02em;
+        }
+
+        /* --- Interactive Scramble Effect for Hero Text --- */
+        .scramble-effect {
+            display: inline-block;
+            transition: color 0.5s;
+            cursor: pointer;
+        }
+        
+        .scramble-effect:hover {
+            color: var(--accent-color);
         }
 
         .hero p {
@@ -340,28 +384,14 @@
             border-radius: 4px;
             font-size: 0.9rem;
             color: var(--text-muted);
-            position: relative;
-            overflow: hidden;
-            --mouse-x: 50%;
-            --mouse-y: 50%;
-            transition: color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .tag::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle 400px at var(--mouse-x) var(--mouse-y), var(--accent-color) 0%, transparent 80%);
-            border-radius: 4px;
-            z-index: -1;
-            pointer-events: none;
+            border: 1px solid transparent;
+            transition: var(--transition);
         }
 
         .tag:hover {
-            color: var(--surface-color);
+            border-color: var(--accent-color);
+            background-color: var(--accent-color);
+            color: #ffffff;
             transform: translateY(-2px);
             cursor: none;
         }
@@ -633,7 +663,7 @@
     <header>
         <div class="container">
             <nav>
-                <a href="#hero" class="logo">Akshay V</a>
+                <a href="#" class="logo">Akshay V</a>
                 <ul class="nav-links" id="navLinks">
                     <li><a href="#about" onclick="closeMenu()">About</a></li>
                     <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
@@ -649,7 +679,10 @@
 
     <main>
         <!-- Hero Section -->
-        <section class="hero" id="hero">
+        <section class="hero">
+            <!-- Background Scramble Effect Layer -->
+            <div class="hero-background" id="heroBackground"></div>
+            
             <div class="container">
                 <div class="hero-content reveal">
                     <span class="hero-eyebrow">Security Researcher & Developer</span>
@@ -1000,76 +1033,161 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        /* --- SKILL TAGS RADIAL FILL ANIMATION --- */
-        document.querySelectorAll('.tag').forEach(tag => {
-            let mouseX = tag.offsetWidth / 2;
-            let mouseY = tag.offsetHeight / 2;
+        /* --- Simple Hash Function (DJB2 Algorithm) --- */
+        function simpleHash(str) {
+            let hash = 5381;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) + hash) + str.charCodeAt(i);
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        /* --- Hero Background Character Generation and Scramble Effect --- */
+        const heroBackground = document.getElementById('heroBackground');
+        const hashChars = '0123456789ABCDEF'; // Hex characters for hash output
+        const charElements = [];
+        
+        // Generate background characters in uniform 5-row grid filling 100% width
+        function generateHeroBackgroundChars() {
+            const heroSection = document.querySelector('.hero');
+            const rect = heroSection.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            const aspectRatio = width / height;
             
-            tag.addEventListener('mouseenter', () => {
-                // Reset to center on enter for smooth start
-                tag.style.setProperty('--mouse-x', '50%');
-                tag.style.setProperty('--mouse-y', '50%');
-            });
+            // Fixed to 5 rows, calculate columns based on aspect ratio to fill 100% width
+            const rows = 5;
+            const cols = Math.ceil(aspectRatio * rows * 1.2); // Scale columns based on width-to-height ratio
             
-            tag.addEventListener('mousemove', (e) => {
-                const rect = tag.getBoundingClientRect();
-                mouseX = e.clientX - rect.left;
-                mouseY = e.clientY - rect.top;
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const charEl = document.createElement('div');
+                    charEl.className = 'hero-char';
+                    
+                    // Initialize with hash-based character
+                    const seedData = `${row}-${col}-${Math.random()}`;
+                    const hashVal = simpleHash(seedData);
+                    charEl.textContent = hashVal[0];
+                    charEl.dataset.row = row;
+                    charEl.dataset.col = col;
+                    charEl.dataset.originalHash = hashVal;
+                    
+                    // Grid positioning (uniform spacing, 100% width coverage)
+                    const topPercent = (row / (rows - 1)) * 80 + 10; // Distribute rows
+                    const leftPercent = (col / (cols - 1)) * 100; // Distribute across full width
+                    
+                    charEl.style.top = topPercent + '%';
+                    charEl.style.left = leftPercent + '%';
+                    charEl.style.transform = `translate(-50%, -50%)`;
+                    
+                    heroBackground.appendChild(charEl);
+                    charElements.push(charEl);
+                }
+            }
+        }
+        
+        generateHeroBackgroundChars();
+        
+        // Add hover effect to hero section with proximity-based activation
+        const heroSection = document.querySelector('.hero');
+        const mouseRadius = 150; // Radius in pixels for activation
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        heroSection.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            charElements.forEach(charEl => {
+                const rect = charEl.getBoundingClientRect();
+                const charCenterX = rect.left + rect.width / 2;
+                const charCenterY = rect.top + rect.height / 2;
                 
-                const xPercent = (mouseX / rect.width) * 100;
-                const yPercent = (mouseY / rect.height) * 100;
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - charCenterX, 2) + 
+                    Math.pow(mouseY - charCenterY, 2)
+                );
                 
-                // Use requestAnimationFrame for smooth animation
-                requestAnimationFrame(() => {
-                    tag.style.setProperty('--mouse-x', `${xPercent}%`);
-                    tag.style.setProperty('--mouse-y', `${yPercent}%`);
-                });
+                // Only activate if within mouse radius
+                if (distance < mouseRadius) {
+                    if (!charEl.isActivating) {
+                        charEl.isActivating = true;
+                        let iteration = 0;
+                        charEl.classList.add('activated');
+                        
+                        clearInterval(charEl.interval);
+                        
+                        charEl.interval = setInterval(() => {
+                            // Generate hash based on mouse position, time, and element position
+                            const hashInput = `${mouseX}${mouseY}${Date.now()}${charEl.dataset.row}${charEl.dataset.col}${iteration}`;
+                            const hash = simpleHash(hashInput);
+                            
+                            // Cycle through hash characters
+                            const charIndex = iteration % hash.length;
+                            charEl.textContent = hash[charIndex];
+                            
+                            if(iteration >= 20) {
+                                // Settle on final hash output
+                                const finalHash = simpleHash(`${charEl.dataset.row}${charEl.dataset.col}${mouseX}${mouseY}`);
+                                charEl.textContent = finalHash[0];
+                                clearInterval(charEl.interval);
+                                charEl.isActivating = false;
+                            }
+                            
+                            iteration++;
+                        }, 50); // Slower animation (50ms instead of 30ms)
+                    }
+                } else {
+                    if (charEl.isActivating) {
+                        clearInterval(charEl.interval);
+                        charEl.isActivating = false;
+                        charEl.classList.remove('activated');
+                        const seedData = `${charEl.dataset.row}-${charEl.dataset.col}-reset`;
+                        const hashVal = simpleHash(seedData);
+                        charEl.textContent = hashVal[0];
+                    }
+                }
             });
-            
-            tag.addEventListener('mouseleave', () => {
-                tag.style.setProperty('--mouse-x', '50%');
-                tag.style.setProperty('--mouse-y', '50%');
+        });
+        
+        heroSection.addEventListener('mouseleave', () => {
+            charElements.forEach(charEl => {
+                clearInterval(charEl.interval);
+                charEl.classList.remove('activated');
+                charEl.isActivating = false;
+                const seedData = `${charEl.dataset.row}-${charEl.dataset.col}-reset`;
+                const hashVal = simpleHash(seedData);
+                charEl.textContent = hashVal[0];
             });
         });
 
-        /* --- HERO H1 SCRAMBLE EFFECT LOGIC --- */
+        /* --- Hash Scramble Effect for Hero H1 --- */
         const letters = "0123456789ABCDEF"; // Hexadecimal hash values
         
-        function triggerScramble(element) {
-            let iteration = 0;
-            
-            // Using Space Mono ensures equal character width, preventing layout shifts
-            clearInterval(element.interval);
-            
-            element.interval = setInterval(() => {
-                element.innerText = element.innerText
-                    .split("")
-                    .map((letter, index) => {
-                        if(index < iteration) {
-                            return element.dataset.value[index];
-                        }
-                        return letters[Math.floor(Math.random() * 16)]
-                    })
-                    .join("");
-                
-                if(iteration >= element.dataset.value.length){ 
-                    clearInterval(element.interval);
-                }
-                
-                iteration += 1 / 3;
-            }, 30);
-        }
-        
         document.querySelectorAll('.scramble-effect').forEach(element => {
-            // Trigger on page load with slight delay for staggered effect
-            setTimeout(() => {
-                triggerScramble(element);
-            }, 100);
-            
-            // Also trigger on hover for interactivity
-            element.addEventListener('mouseenter', () => {
-                triggerScramble(element);
-            });
+            element.onmouseover = event => {  
+                let iteration = 0;
+                
+                clearInterval(event.target.interval);
+                
+                event.target.interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText
+                        .split("")
+                        .map((letter, index) => {
+                            if(index < iteration) {
+                                return event.target.dataset.value[index];
+                            }
+                            return letters[Math.floor(Math.random() * 16)]
+                        })
+                        .join("");
+                    
+                    if(iteration >= event.target.dataset.value.length){ 
+                        clearInterval(event.target.interval);
+                    }
+                    
+                    iteration += 1 / 3;
+                }, 30);
+            }
         });
 
         // Initialize Lenis for Premium Smooth Scrolling

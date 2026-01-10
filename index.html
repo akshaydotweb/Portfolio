@@ -1,165 +1,1699 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="./assets/styles.css">
-    <link rel="stylesheet" href="./assets/responsive.css">
-    <link rel="icon" type="image/x-icon" href="./assets/akshay.web@328x767.jpg" class="icon">
-
-    <title>Akshay's Portfolio</title><link rel="preconnect" href="https://fonts.googleapis.com">
-
+    <title>Akshay | Security Researcher & Developer</title>
+    <meta name="description" content="Portfolio of Akshay, a security-focused developer specializing in vulnerability assessment, penetration testing, and secure system design.">
+    
+   <!-- Google Fonts: Space Grotesk (Display), Manrope (Body), Space Mono (Tech/Accents) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Space+Grotesk:wght@500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Lenis for Premium Smooth Scrolling (Standard Developer Technique) -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.js"></script>
 
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --bg-color: #f4f4f5; /* Slightly cooler, techy grey */
+            --surface-color: #ffffff;
+            --text-main: #09090b; /* Zinc 950 - Almost Black */
+            --text-muted: #52525b;
+            --accent-color: #2563eb; /* Tech Blue */
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --border-color: #e4e4e7;
+            
+            /* New Font Variables */
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 8rem;
+
+            --container-width: 1200px;
+            --transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* Snappier tech feel */
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Show default cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            *, *::before, *::after { cursor: auto; }
+            .cursor-dot { display: none !important; }
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* --- CUSTOM CURSOR (Single Dot with Inversion) --- */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff; /* Base color white */
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            
+            /* This creates the high-contrast "inverted" effect automatically */
+            mix-blend-mode: difference; 
+            
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Hover State: Scale up for feedback */
+        body.hovering .cursor-dot {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* --- Utility Classes --- */
+        .container {
+            width: 90%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: var(--surface-color);
+            border: 1px solid var(--text-main);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--text-main);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--text-main);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-main);
+            color: var(--surface-color);
+        }
+
+        /* --- Header / Navigation --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(249, 249, 249, 0.85);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1.25rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-weight: 600;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 180px;
+            padding-bottom: 120px;
+            min-height: 90vh;
+            background-color: rgba(255, 255, 255, 0.75);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hero Background with Random Characters */
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .hero-char {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 15vw;
+            font-weight: 700;
+            color: hsla(0, 0%, 100%, 0.05);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.108); 
+            line-height: 1;
+            white-space: nowrap;
+            -webkit-user-select: none;
+            user-select: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin: 1%;
+        }
+
+        .hero-char.activated {
+            color: #0051ff;
+            opacity: 1;
+            text-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.051);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            
+        }
+
+        .hero-eyebrow {
+            color: var(--accent-color);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .hero h1 {
+            font-family: var(--font-mono);
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- Interactive Scramble Effect for Hero Text --- */
+        .scramble-effect {
+            display: inline-block;
+            transition: color 0.5s;
+            cursor: pointer;
+        }
+        
+        .scramble-effect:hover {
+            color: var(--accent-color);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* --- About Section --- */
+        .about {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--surface-color);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .skills-container {
+            margin-top: 2rem;
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background-color: var(--bg-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tag:hover {
+            border-color: var(--accent-color);
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            cursor: none;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            /* Minimal subtle shadow */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); 
+        }
+
+        /* --- Projects Section --- */
+        .projects {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+            border-color: var(--border-color);
+        }
+
+        .project-image-wrapper {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            background: linear-gradient(110deg, #333 0.6%, #222 100%);
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stars-grid {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 1px;
+            width: 100%;
+            height: 100%;
+            padding: 12px;
+        }
+
+        .star {
+            position: relative;
+            width: 1px;
+            height: 1px;
+            background-color: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star-dot {
+            width: 1px;
+            height: 1px;
+            background-color: #666;
+            border-radius: 50%;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .star.glowing .star-dot {
+            background-color: #fff;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.8), 0 0 12px rgba(37, 99, 235, 0.5);
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star.hover-glowing .star-dot {
+            background-color: #fff;
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.8), 0 0 12px rgba(37, 99, 235, 0.5);
+            animation: hoverTwinkle 2s ease-in-out forwards;
+        }
+
+        .star-glow {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            opacity: 0;
+            filter: blur(1px);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 20px rgba(37, 99, 235, 0.5);
+            animation: glowPulse 2s ease-in-out forwards;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.8);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hoverTwinkle {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.2);
+            }
+            50% {
+                transform: scale(2.5);
+            }
+            75% {
+                transform: scale(2.2);
+            }
+            100% {
+                transform: scale(1.5);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(2.2);
+            }
+        }
+
+        /* .project-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none; 
+        } */
+
+        .project-card:hover .project-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-category {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .project-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-link {
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+            border: 1.5px solid var(--accent-color);
+            border-radius: 6px;
+            color: var(--accent-color);
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-link:hover {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
+        }
+
+        .project-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover i {
+            transform: translateX(4px);
+        }
+
+        /* --- Contact Section --- */
+        .contact {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--surface-color);
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h2 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .contact-details {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .contact-item i {
+            color: var(--accent-color);
+            font-size: 1.25rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            background-color: var(--surface-color);
+            box-shadow: 0 0 0 4px rgba(45, 85, 255, 0.05);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* --- Variable Font Hover Effect for Input --- */
+        .font-variable-letter {
+            display: inline-block;
+            font-variation-settings: 'wght' 400;
+        }
+
+        /* Variable Font for .name span */
+        .name {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .name-letter {
+            display: inline-block;
+            font-variation-settings: 'wght' 400;
+            transition: font-variation-settings 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .name:hover .name-letter {
+            font-variation-settings: 'wght' 900;
+        }
+
+        /* Variable Font for h3 elements */
+        h3 .h3-letter {
+            display: inline-block;
+            font-variation-settings: 'wght' 400;
+            transition: font-variation-settings 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        h3:hover .h3-letter {
+            font-variation-settings: 'wght' 900;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-link {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 968px) {
+            .hero h1 { font-size: 3.5rem; }
+            .about-grid, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+            .about-image { order: -1; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; z-index: 1001; }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: var(--surface-color);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+            }
+
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.5rem; }
+            
+            .hero { padding-top: 140px; text-align: center; }
+            .hero-content { margin: 0 auto; }
+            .hero-actions { justify-content: center; }
+            .contact-info h2 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.8rem; }
+            .btn { width: 100%; justify-content: center; }
+            .hero-actions { flex-direction: column; }
+        }
+
+        /* --- Letter Swap Animation --- */
+        .letter-swap {
+            display: inline-block;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .letter-container {
+            position: relative;
+            display: inline-block;
+            white-space: pre;
+            min-height: 1.2em;
+        }
+
+        .letter-primary {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .letter-secondary {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: block;
+            transform: translateY(100%);
+        }
+
+        /* Animation state - triggered by JavaScript */
+        .letter-swap.animate .letter-primary {
+            animation: letterSwapDown 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .letter-swap.animate .letter-secondary {
+            animation: letterSwapUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes letterSwapDown {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+
+        @keyframes letterSwapUp {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-
 <body>
+
+    <!-- Custom Single Dot Cursor -->
+    <div class="cursor-dot" data-cursor-dot></div>
+
+    <!-- Header -->
     <header>
-        <nav>
-            <ul>
-                <li><a href="#Home">Home</a></li>
-                <li><a href="#Projects">Work</a></li>
-                <li><a href="#footer">Contact</a></li>
-            </ul>
-        </nav>
-        <aside class="logo">
-            <a href="#footer">
-                <img src="./assets/akshay.web@328x767.jpg" alt="Akshay's logo">
-            </a>
-        </aside>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Akshay V</a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#about" onclick="closeMenu()">About</a></li>
+                    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+                    <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+                    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">
+                    <i class="ph ph-list"></i>
+                </button>
+            </nav>
+        </div>
     </header>
 
-    <main id="Home">
-
-        <section id="hero">
-            <h1>
-                < Hello, I'm <span class="name">Akshay!</span><br>
-                A Web Designer <br>
-                currently working on <br>
-                some <button class="grn-capsule"> front-end </button><br>
-                projects & mostly <br>
-                <span class="org-rectangle">IT specialist.</span>
-            </h1>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <!-- Background Scramble Effect Layer -->
+            <div class="hero-background" id="heroBackground"></div>
+            
+            <div class="container">
+                <div class="hero-content reveal">
+                    <span class="hero-eyebrow">Security Researcher & Developer</span>
+                    <h1>
+                        <span class="scramble-effect" data-value="SECURING DIGITAL">SECURING DIGITAL</span>
+                        <br>
+                        <span class="scramble-effect" data-value="INFRASTRUCTURE.">INFRASTRUCTURE.</span>
+                    </h1>
+                    <p>Specialized in vulnerability assessment, penetration testing, and threat modeling. Building secure architectures and identifying attack vectors to protect critical systems.</p>
+                    <div class="hero-actions">
+                        <a href="#projects" class="btn btn-primary">View Projects <i class="ph ph-arrow-down"></i></a>
+                        <a href="#contact" class="btn btn-outline">Contact Me</a>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section id="mark">
-            <h1>/></h1>
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text reveal">
+                        <h2 class="section-title">About Me</h2>
+                        <p>I'm <span class="name">Akshay</span>, a security-focused developer with a Bachelor of Technology in Computer Science and Engineering from PES University. I specialize in identifying and mitigating security vulnerabilities through systematic testing, threat modeling, and secure system design.</p>
+                        <p>With expertise in penetration testing, vulnerability assessment, and secure system design, I help organizations build resilient infrastructure. My approach combines analytical rigor with hands-on security testing to uncover and address critical security gaps before they become liabilities.</p>
+                        
+                        <div class="skills-container">
+                            <div class="skill-category">
+                                <h4>Cybersecurity & Testing</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">Penetration Testing</span>
+                                    <span class="tag">Vulnerability Assessment</span>
+                                    <span class="tag">Threat Modeling</span>
+                                    <span class="tag">Burp Suite</span>
+                                    <span class="tag">Security Testing</span>
+                                    <span class="tag">Risk Analysis</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h4>Backend & Infrastructure</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">Node.js</span>
+                                    <span class="tag">Express</span>
+                                    <span class="tag">Python</span>
+                                    <span class="tag">PostgreSQL</span>
+                                    <span class="tag">Docker</span>
+                                    <span class="tag">AWS</span>
+                                    <span class="tag">Linux</span>
+                                </div>
+                            </div>
+                            <div class="skill-category">
+                                <h4>Compliance & Standards</h4>
+                                <div class="skill-tags">
+                                    <span class="tag">OWASP</span>
+                                    <span class="tag">Cloud Security</span>
+                                    <span class="tag">Network Security</span>
+                                    <span class="tag">Secure Coding</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-image reveal">
+                        <!-- Using a high quality placeholder for a cybersecurity professional -->
+                        <!-- <img src="https://picsum.photos/seed/cybersecurity/600/700" alt="Akshay, cybersecurity expert" width="600" height="700"> -->
+                    </div>
+                </div>
+            </div>
         </section>
 
+        <!-- Experience Section -->
+        <section id="experience" class="about">
+            <div class="container">
+                <div class="reveal" style="margin-bottom: 3rem;">
+                    <h2 class="section-title">Experience</h2>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr; gap: 2.5rem;">
+                    <!-- Experience 2 -->
+                    <div class="reveal">
+                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
+                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Research Intern</h3>
+                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">CAVE Labs • Bengaluru • Jun 2025 - Jul 2025</p>
+                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
+                                <li>Integrated VR simulations with headsets, optimizing terrain rendering and hardware compatibility</li>
+                                <li>Improved rendering efficiency by 25%, reducing latency for immersive experiences</li>
+                                <li>Achieved 100% compatibility with VR devices through seamless hardware integration</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Experience 1 -->
+                    <div class="reveal">
+                        <div style="border-left: 3px solid var(--accent-color); padding-left: 2rem;">
+                            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Bug Bounty Hunter</h3>
+                            <p style="color: var(--accent-color); font-weight: 600; margin-bottom: 0.5rem;">Medstar2000 • Remote • JAN 2023 - MAR 2023</p>
+                            <ul style="color: var(--text-muted); margin-top: 1rem; list-style-type: disc; padding-left: 1.25rem;">
+                                <li>Identified and responsibly disclosed high-severity XSS vulnerability in production web application through systematic security testing</li>
+                                <li>Conducted comprehensive threat modeling of web applications to identify attack vectors and business risk implications</li>
+                                <li>Leveraged Burp Suite and penetration testing tools for application security assessment and security control review</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects">
+            <div class="container">
+                <div class="reveal">
+                    <h2 class="section-title">Featured Projects</h2>
+                </div>
+                
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
+                            <!-- <img src="https://picsum.photos/seed/network/800/600" alt="Campus Network Security"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category">Network Architecture</span>
+                            <h3 class="project-title">Campus Network Security</h3>
+                            <p class="project-desc">Enterprise-scale network architecture with optimized routing, ACLs, VLANs, and network segmentation. Designed for redundancy, failover mechanisms, and multi-site deployment.</p>
+                            <!-- <a href="#" class="project-link">Learn More <i class="ph ph-arrow-right"></i></a> -->
+                        </div>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
+                            <!-- <img src="https://picsum.photos/seed/security/800/600" alt="Mail Box Platform"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category">Secure Web App</span>
+                            <h3 class="project-title">Mail Box Platform</h3>
+                            <p class="project-desc">Secure web application with RESTful APIs, encrypted credential storage, session management, and AWS S3 integration for multi-user data security.</p>
+                            <button class="project-link" onclick="window.open('https://github.com/akshaydotweb/mail-box', '_blank')">Inspect Code <i class="ph ph-code"></i></button>
+                        </div>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="project-card reveal">
+                        <div class="project-image-wrapper">
+                            <div class="stars-grid"></div>
+                            <!-- <img src="https://picsum.photos/seed/blockchain/800/600" alt="Asteroid Decentralized Storage"> -->
+                        </div>
+                        <div class="project-info">
+                            <span class="project-category"> Blockchain Application</span>
+                            <h3 class="project-title">Asteroid – Decentralized File Storage</h3>
+                            <p class="project-desc">Decentralized storage system combining IPFS with on-chain metadata. Implemented with Docker microservices, wallet-based authentication, and distributed trust model.</p>
+                            <button class="project-link" onclick="window.open('https://github.com/akshaydotweb/asteroid-ipfs', '_blank')">Inspect Code <i class="ph ph-code"></i></button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-layout">
+                    <div class="contact-info reveal">
+                        <h2>Let's secure your systems.</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem;">Available for security consulting, penetration testing engagements, and security architecture projects.</p>
+                        
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <i class="ph ph-envelope-simple"></i>
+                                <a href="mailto:akshayvmudaliar@gmail.com">akshayvmudaliar@gmail.com</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="ph ph-map-pin"></i>
+                                <span>Bengaluru, India</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="contact-form reveal" onsubmit="event.preventDefault(); alert('Thanks for the message! This is a demo form.');">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="jane@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" placeholder="Tell me about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <section id="Projects">
-
-        <aside class="my-work"><h1>my-work</h1></aside>
-
-        <aside class="project-grid">
-
-            <article class="project-card c-1"> 
-                <a href="https://akshaydotweb.github.io/Unifeed-blog-template/" target="_blank">
-                    <img src="./assets/MainArticleImage.png" alt="Unifeed">
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/akshayvmudaliar" class="social-link" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
+                <a href="https://github.com/akshaydotweb" class="social-link" aria-label="GitHub"><i class="ph ph-github-logo"></i></a>
+                <a href="https://tryhackme.com/p/akshaydotweb" class="social-link" aria-label="TryHackMe">
+                    <i class="ph ph-target"></i>
                 </a>
-                <div class="label">
-                    <a href="https://akshaydotweb.github.io/Unifeed-blog-template/" target="_blank">
-                        <h2>Unifeed Blog</h2>
-                    </a>
-                </div>
-            </article>
-
-            <article class="project-card c-2">
-                <a href="https://akshaydotweb.github.io/Fiber-stater-files/" target="_blank">
-                    <img src="./assets/Page Image.png" alt="fiber file">
-                </a>
-                <div class="label">
-                    <a href="https://akshaydotweb.github.io/Fiber-stater-files/" target="_blank">
-                        <h2>Fiber stater files</h2>
-                    </a>
-                </div>
-            </article>
-
-            <article class="project-card c-3">
-                <a href="https://akshaydotweb.github.io/Tribute-web-page/" target="_blank">
-                    <img src="./assets/tribute-page-main-image.jpg" alt="Tribute-web-page">
-                </a>
-                <div class="label">
-                    <a href="https://akshaydotweb.github.io/Tribute-web-page/" target="_blank">
-                        <h2>Tribute web page</h2>
-                    </a>
-                </div>
-            </article>
-
-            <article class="project-card c-4">
-                <a href="https://akshaydotweb.github.io/Chirp-Starter/" target="_blank">
-                    <img src="./assets/heroT.png.png" alt="chirp-starter">
-                </a>
-                <div class="label">
-                    <a href="https://akshaydotweb.github.io/Chirp-Starter/" target="_blank">
-                        <h2>Chirp starter page</h2>
-                    </a>
-                </div>
-            </article>
-
-        </aside>
-
-        <aside class="more-btn-pattern">
-            <button class="more-btn">
-                view more
-            </button>
-        </aside>
-
-    </section>
-
-    <footer id="footer">
-
-        <aside class="grid-dot-pattern">
-            <article class="work-with-me">
-                <h1>
-                    Ready to start a <br>
-                    project ?
-                </h1>
-                <section class="strip-pattern">
-                    <article class="contact-btn">
-                        <a href="mailto:pichaisundar318@gmail.com"><p>contact ya boi!</p></a>
-                    </article>
-                </section>
-            </article>
-        </aside>
-
-        <aside class="social-links">
-
-            <article class="social-icons">
-                <a href="https://www.github.com/akshaydotweb" target="_blank">
-                    <img src="./assets/SVGs/github.svg" alt="github">
-                </a>
-                <a href="https://www.linkedin.com/in/akshay-v-663a32217" target="_blank">
-                    <img src="./assets/SVGs/linkedin.svg" alt="linkedin">
-                </a>
-                <a href="https://www.instagram.com/akshay.web" target="_blank">
-                    <img src="./assets/SVGs/insta.svg" alt="Instagram">
-                </a>
-                <a href="https://open.spotify.com/user/62zxmduhyh0gryknmfx6as6nl?si=28ec0e0d57ea4f1a" target="_blank">
-                    <img src="./assets/SVGs/spotify.svg" alt="spotify">
-                </a>
-            </article>
-
-            <article class="my-name">
-                <h3>Akshay.V</h3>
-            </article>
-
-        </aside>
-
-        <aside class="msg">
-            <p>
-                made with extra 💖 by Akshay
-            </p>
-        </aside>
-
+            </div>
+            <p class="copyright">&copy; 2026 Akshay. All rights reserved.</p>
+        </div>
     </footer>
 
-</body>
+    <!-- Minimal JavaScript for Interactions -->
+    <script>
+        /* --- Single Dot Cursor Logic with Speed Detection --- */
+        const cursorDot = document.querySelector("[data-cursor-dot]");
+        
+        // Elements that trigger hover state
+        const hoverables = document.querySelectorAll("a, button, input, textarea, .project-card");
 
+        // Track mouse position and velocity
+        let lastX = 0;
+        let lastY = 0;
+        let lastTime = Date.now();
+        let velocityTimeout;
+        let scrollTimeout;
+        let lastScrollY = 0;
+
+        // Track Mouse Movement with Speed Detection
+        window.addEventListener("mousemove", function (e) {
+            const currentTime = Date.now();
+            const deltaTime = currentTime - lastTime;
+            
+            // Calculate distance
+            const deltaX = e.clientX - lastX;
+            const deltaY = e.clientY - lastY;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            // Calculate velocity (pixels per millisecond)
+            const velocity = deltaTime > 0 ? distance / deltaTime : 0;
+            
+            // Direct movement for the dot
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+            
+            // Scale based on velocity
+            let scale = 1;
+            if (velocity > 0.5) {
+                scale = 1.8; // High speed
+            } else if (velocity > 0.2) {
+                scale = 1.4; // Medium speed
+            }
+            
+            cursorDot.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            
+            // Reset to normal size after movement stops
+            clearTimeout(velocityTimeout);
+            velocityTimeout = setTimeout(() => {
+                if (!document.body.classList.contains("hovering")) {
+                    cursorDot.style.transform = `translate(-50%, -50%) scale(1)`;
+                }
+            }, 150);
+            
+            // Update tracking
+            lastX = e.clientX;
+            lastY = e.clientY;
+            lastTime = currentTime;
+        });
+
+        // Hover Effects
+        hoverables.forEach((el) => {
+            el.addEventListener("mouseenter", () => {
+                document.body.classList.add("hovering");
+                cursorDot.style.transform = `translate(-50%, -50%) scale(2)`;
+            });
+            el.addEventListener("mouseleave", () => {
+                document.body.classList.remove("hovering");
+                cursorDot.style.transform = `translate(-50%, -50%) scale(1)`;
+            });
+        });
+
+        // Scroll Detection with Cursor Scaling
+        window.addEventListener("scroll", function () {
+            const scrollY = window.scrollY;
+            const scrollDelta = Math.abs(scrollY - lastScrollY);
+            
+            // Scale cursor based on scroll speed
+            let scrollScale = 1;
+            if (scrollDelta > 5) {
+                scrollScale = 1.6; // Fast scroll
+            } else if (scrollDelta > 2) {
+                scrollScale = 1.3; // Slow scroll
+            }
+            
+            if (!document.body.classList.contains("hovering")) {
+                cursorDot.style.transform = `translate(-50%, -50%) scale(${scrollScale})`;
+            }
+            
+            // Reset scroll scale after scroll stops
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (!document.body.classList.contains("hovering")) {
+                    cursorDot.style.transform = `translate(-50%, -50%) scale(1)`;
+                }
+            }, 200);
+            
+            lastScrollY = scrollY;
+        });
+
+        // Mobile Menu Toggle
+        const navLinks = document.getElementById('navLinks');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const icon = mobileMenuBtn.querySelector('i');
+
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+            
+            // Toggle Icon between List and X
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('ph-list');
+                icon.classList.add('ph-x');
+            } else {
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            }
+        }
+
+        function closeMenu() {
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            }
+        }
+
+        // Scroll Reveal Animation using Intersection Observer
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15, // Trigger when 15% of element is visible
+            rootMargin: "0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        /* --- Simple Hash Function (DJB2 Algorithm) --- */
+        function simpleHash(str) {
+            let hash = 5381;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) + hash) + str.charCodeAt(i);
+            }
+            return Math.abs(hash).toString(16);
+        }
+
+        /* --- Hero Background Character Generation and Scramble Effect --- */
+        const heroBackground = document.getElementById('heroBackground');
+        const hashChars = '0123456789ABCDEF'; // Hex characters for hash output
+        const charElements = [];
+        
+        // Generate background characters in uniform 5-row grid filling 100% width
+        function generateHeroBackgroundChars() {
+            const heroSection = document.querySelector('.hero');
+            const rect = heroSection.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            const aspectRatio = width / height;
+            
+            // Fixed to 5 rows, calculate columns based on aspect ratio to fill 100% width
+            const rows = 5;
+            const cols = Math.ceil(aspectRatio * rows * 1.2); // Scale columns based on width-to-height ratio
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const charEl = document.createElement('div');
+                    charEl.className = 'hero-char';
+                    
+                    // Initialize with hash-based character
+                    const seedData = `${row}-${col}-${Math.random()}`;
+                    const hashVal = simpleHash(seedData);
+                    charEl.textContent = hashVal[0];
+                    charEl.dataset.row = row;
+                    charEl.dataset.col = col;
+                    charEl.dataset.originalHash = hashVal;
+                    
+                    // Grid positioning (uniform spacing, 100% width coverage)
+                    const topPercent = (row / (rows - 1)) * 80 + 10; // Distribute rows
+                    const leftPercent = (col / (cols - 1)) * 100; // Distribute across full width
+                    
+                    charEl.style.top = topPercent + '%';
+                    charEl.style.left = leftPercent + '%';
+                    charEl.style.transform = `translate(-50%, -50%)`;
+                    
+                    heroBackground.appendChild(charEl);
+                    charElements.push(charEl);
+                }
+            }
+        }
+        
+        generateHeroBackgroundChars();
+        
+        // Add hover effect to hero section with proximity-based activation
+        const heroSection = document.querySelector('.hero');
+        const mouseRadius = 150; // Radius in pixels for activation
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        heroSection.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            charElements.forEach(charEl => {
+                const rect = charEl.getBoundingClientRect();
+                const charCenterX = rect.left + rect.width / 2;
+                const charCenterY = rect.top + rect.height / 2;
+                
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - charCenterX, 2) + 
+                    Math.pow(mouseY - charCenterY, 2)
+                );
+                
+                // Only activate if within mouse radius
+                if (distance < mouseRadius) {
+                    if (!charEl.isActivating) {
+                        charEl.isActivating = true;
+                        let iteration = 0;
+                        charEl.classList.add('activated');
+                        
+                        clearInterval(charEl.interval);
+                        
+                        charEl.interval = setInterval(() => {
+                            // Generate hash based on mouse position, time, and element position
+                            const hashInput = `${mouseX}${mouseY}${Date.now()}${charEl.dataset.row}${charEl.dataset.col}${iteration}`;
+                            const hash = simpleHash(hashInput);
+                            
+                            // Cycle through hash characters
+                            const charIndex = iteration % hash.length;
+                            charEl.textContent = hash[charIndex];
+                            
+                            if(iteration >= 20) {
+                                // Settle on final hash output
+                                const finalHash = simpleHash(`${charEl.dataset.row}${charEl.dataset.col}${mouseX}${mouseY}`);
+                                charEl.textContent = finalHash[0];
+                                clearInterval(charEl.interval);
+                                charEl.isActivating = false;
+                            }
+                            
+                            iteration++;
+                        }, 50); // Slower animation (50ms instead of 30ms)
+                    }
+                } else {
+                    if (charEl.isActivating) {
+                        clearInterval(charEl.interval);
+                        charEl.isActivating = false;
+                        charEl.classList.remove('activated');
+                        const seedData = `${charEl.dataset.row}-${charEl.dataset.col}-reset`;
+                        const hashVal = simpleHash(seedData);
+                        charEl.textContent = hashVal[0];
+                    }
+                }
+            });
+        });
+        
+        heroSection.addEventListener('mouseleave', () => {
+            charElements.forEach(charEl => {
+                clearInterval(charEl.interval);
+                charEl.classList.remove('activated');
+                charEl.isActivating = false;
+                const seedData = `${charEl.dataset.row}-${charEl.dataset.col}-reset`;
+                const hashVal = simpleHash(seedData);
+                charEl.textContent = hashVal[0];
+            });
+        });
+
+        /* --- Hash Scramble Effect for Hero H1 --- */
+        const letters = "0123456789ABCDEF"; // Hexadecimal hash values
+        
+        document.querySelectorAll('.scramble-effect').forEach(element => {
+            element.onmouseover = event => {  
+                let iteration = 0;
+                
+                clearInterval(event.target.interval);
+                
+                event.target.interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText
+                        .split("")
+                        .map((letter, index) => {
+                            if(index < iteration) {
+                                return event.target.dataset.value[index];
+                            }
+                            return letters[Math.floor(Math.random() * 16)]
+                        })
+                        .join("");
+                    
+                    if(iteration >= event.target.dataset.value.length){ 
+                        clearInterval(event.target.interval);
+                    }
+                    
+                    iteration += 1 / 3;
+                }, 30);
+            }
+        });
+
+        // Initialize Lenis for Premium Smooth Scrolling
+        const lenis = new Lenis({
+            duration: 1.2, // Smooth duration in seconds
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
+            direction: 'vertical', // 'vertical' or 'horizontal'
+            gestureDirection: 'vertical',
+            smoothWheel: true,
+            smoothTouch: false,
+            touchMultiplier: 2
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+
+        // Smooth Scroll for Anchor Links with Lenis
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    lenis.scrollTo(targetElement, {
+                        offset: -80,
+                        duration: 1.2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                }
+            });
+        });
+
+        /* --- Letter Swap Animation for Section Titles --- */
+        let letterSwapInitialized = false;
+        
+        function initLetterSwapAnimation() {
+            if (letterSwapInitialized) return; // Prevent multiple initializations
+            letterSwapInitialized = true;
+            
+            const titleElements = document.querySelectorAll('.section-title');
+            
+            titleElements.forEach(title => {
+                // Skip if already initialized
+                if (title.querySelectorAll('.letter-swap').length > 0) {
+                    return;
+                }
+                
+                const text = title.textContent;
+                title.textContent = ''; // Clear original text
+                
+                // Wrap each letter in letter-swap structure
+                text.split('').forEach((letter, index) => {
+                    const letterSwap = document.createElement('span');
+                    letterSwap.className = 'letter-swap';
+                    
+                    // Add stagger delay
+                    const staggerDelay = index * 0.03;
+                    letterSwap.style.animationDelay = `${staggerDelay}s`;
+                    
+                    const container = document.createElement('span');
+                    container.className = 'letter-container';
+                    
+                    const primary = document.createElement('span');
+                    primary.className = 'letter-primary';
+                    primary.textContent = letter;
+                    primary.style.animationDelay = `${staggerDelay}s`;
+                    
+                    const secondary = document.createElement('span');
+                    secondary.className = 'letter-secondary';
+                    secondary.textContent = letter;
+                    secondary.style.animationDelay = `${staggerDelay}s`;
+                    
+                    container.appendChild(primary);
+                    container.appendChild(secondary);
+                    letterSwap.appendChild(container);
+                    
+                    title.appendChild(letterSwap);
+                });
+                
+                // Add hover listener to trigger animation
+                title.addEventListener('mouseenter', function() {
+                    const letterSwaps = this.querySelectorAll('.letter-swap');
+                    letterSwaps.forEach(swap => {
+                        // Remove and re-add class to retrigger animation
+                        swap.classList.remove('animate');
+                        // Force reflow to restart animation
+                        void swap.offsetWidth;
+                        swap.classList.add('animate');
+                    });
+                });
+                
+                // Reset animation on mouse leave
+                title.addEventListener('mouseleave', function() {
+                    const letterSwaps = this.querySelectorAll('.letter-swap');
+                    letterSwaps.forEach(swap => {
+                        swap.classList.remove('animate');
+                        // Reset to initial state
+                        const primary = swap.querySelector('.letter-primary');
+                        const secondary = swap.querySelector('.letter-secondary');
+                        if (primary) primary.style.transform = 'translateY(0)';
+                        if (secondary) secondary.style.transform = 'translateY(100%)';
+                    });
+                });
+            });
+        }
+
+        // Initialize letter swap when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLetterSwapAnimation);
+        } else {
+            initLetterSwapAnimation();
+        }
+
+        /* --- Variable Font Hover Effect for Input Field --- */
+        const nameInput = document.getElementById('name');
+        
+        if (nameInput && nameInput.tagName === 'INPUT') {
+            nameInput.addEventListener('mouseenter', function() {
+                const value = this.value || this.placeholder;
+                if (!value) return;
+                
+                const container = this.parentElement;
+                if (getComputedStyle(container).position === 'static') {
+                    container.style.position = 'relative';
+                }
+                
+                const animLayer = document.createElement('div');
+                animLayer.style.cssText = `
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    padding: 1rem;
+                    font-family: inherit;
+                    font-size: inherit;
+                    font-weight: inherit;
+                    color: var(--text-main);
+                    pointer-events: none;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    z-index: 10;
+                `;
+                
+                value.split('').forEach((letter, index) => {
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'font-variable-letter';
+                    letterSpan.textContent = letter;
+                    letterSpan.style.fontVariationSettings = "'wght' 400";
+                    animLayer.appendChild(letterSpan);
+                    
+                    setTimeout(() => {
+                        letterSpan.style.transition = 'font-variation-settings 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                        letterSpan.style.fontVariationSettings = "'wght' 900";
+                    }, index * 30);
+                });
+                
+                container.appendChild(animLayer);
+                
+                setTimeout(() => {
+                    if (animLayer.parentElement) animLayer.remove();
+                }, 700);
+            });
+        }
+
+        /* --- Variable Font Hover for .name span --- */
+        const nameSpan = document.querySelector('.name');
+        if (nameSpan && nameSpan.tagName === 'SPAN') {
+            const originalText = nameSpan.textContent;
+            nameSpan.textContent = '';
+            
+            originalText.split('').forEach((letter, index) => {
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'name-letter';
+                letterSpan.textContent = letter;
+                letterSpan.style.animationDelay = `${index * 0.03}s`;
+                nameSpan.appendChild(letterSpan);
+            });
+        }
+
+        /* --- Variable Font Hover for h3 elements in Experience --- */
+        const h3Elements = document.querySelectorAll('#experience h3');
+        h3Elements.forEach(h3 => {
+            const originalText = h3.textContent;
+            h3.textContent = '';
+            
+            originalText.split('').forEach((letter, index) => {
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'h3-letter';
+                letterSpan.textContent = letter;
+                letterSpan.style.animationDelay = `${index * 0.03}s`;
+                h3.appendChild(letterSpan);
+            });
+        });
+
+        /* --- Glowing Stars Background Animation for Project Cards --- */
+        function initializeStarsGrid(gridElement) {
+            const stars = 108; // 18 columns × 6 rows
+            const glowingStars = new Set();
+            const wrapper = gridElement.closest('.project-image-wrapper');
+            let isHovering = false;
+            let autoGlowInterval;
+
+            function createStarElement() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const starDot = document.createElement('div');
+                starDot.className = 'star-dot';
+                star.appendChild(starDot);
+                
+                return star;
+            }
+
+            // Initialize all stars
+            for (let i = 0; i < stars; i++) {
+                gridElement.appendChild(createStarElement());
+            }
+
+            // Function to randomly glow 5 stars (auto mode)
+            function updateGlowingStars() {
+                if (isHovering) return; // Don't auto-glow while hovering
+                
+                glowingStars.clear();
+                const starElements = gridElement.querySelectorAll('.star');
+                
+                // Remove all glowing classes
+                starElements.forEach(star => star.classList.remove('glowing'));
+                
+                // Add glow effect to 5 random stars
+                for (let i = 0; i < 5; i++) {
+                    const randomIdx = Math.floor(Math.random() * stars);
+                    glowingStars.add(randomIdx);
+                    starElements[randomIdx].classList.add('glowing');
+                    
+                    // Add glow effect
+                    const glow = document.createElement('div');
+                    glow.className = 'star-glow';
+                    const delay = (randomIdx % 10) * 0.1;
+                    glow.style.animationDelay = `${delay}s`;
+                    starElements[randomIdx].appendChild(glow);
+                    
+                    // Remove glow after animation
+                    setTimeout(() => {
+                        if (glow.parentElement) glow.remove();
+                    }, 2200);
+                }
+            }
+
+            // Hover effect: glow ALL stars with scale sequence
+            function glowAllStars() {
+                isHovering = true;
+                const starElements = gridElement.querySelectorAll('.star');
+                
+                starElements.forEach((star, index) => {
+                    star.classList.remove('glowing');
+                    star.classList.add('hover-glowing');
+                    
+                    // Stagger the animation start for each star
+                    const staticDelay = index * 0.01;
+                    star.querySelector('.star-dot').style.animationDelay = `${staticDelay}s`;
+                    
+                    // Add glow effect
+                    const glow = document.createElement('div');
+                    glow.className = 'star-glow';
+                    glow.style.animationDelay = `${staticDelay}s`;
+                    star.appendChild(glow);
+                    
+                    // Remove glow after animation
+                    setTimeout(() => {
+                        if (glow.parentElement) glow.remove();
+                    }, 2200);
+                });
+            }
+
+            function stopGlowAllStars() {
+                isHovering = false;
+                const starElements = gridElement.querySelectorAll('.star');
+                starElements.forEach(star => {
+                    star.classList.remove('hover-glowing');
+                });
+                // Restart auto glow
+                updateGlowingStars();
+            }
+
+            // Add hover listeners
+            if (wrapper) {
+                wrapper.addEventListener('mouseenter', glowAllStars);
+                wrapper.addEventListener('mouseleave', stopGlowAllStars);
+            }
+
+            // Start auto glow interval
+            autoGlowInterval = setInterval(updateGlowingStars, 3000);
+            updateGlowingStars(); // Initial call
+        }
+
+        // Initialize stars for each project card
+        document.querySelectorAll('.stars-grid').forEach(grid => {
+            initializeStarsGrid(grid);
+        });
+    </script>
+</body>
 </html>

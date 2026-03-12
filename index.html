@@ -56,7 +56,7 @@
         }
 
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
             font-size: 16px;
         }
 
@@ -1389,37 +1389,63 @@
         });
 
         // Initialize Lenis for Premium Smooth Scrolling
-        const lenis = new Lenis({
-            duration: 1.2, // Smooth duration in seconds
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
-            direction: 'vertical', // 'vertical' or 'horizontal'
-            gestureDirection: 'vertical',
-            smoothWheel: true,
-            smoothTouch: false,
-            touchMultiplier: 2
-        });
+        let lenis;
+        let lenisEnabled = false;
+        
+        if (window.Lenis) {
+            try {
+                lenis = new Lenis({
+                    duration: 1.2, // Smooth duration in seconds
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
+                    direction: 'vertical', // 'vertical' or 'horizontal'
+                    gestureDirection: 'vertical',
+                    smoothWheel: true,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                    lerp: 0.1 // Linear interpolation factor for smoother motion
+                });
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
+                let rafId;
+                
+                function raf(time) {
+                    lenis.raf(time);
+                    rafId = requestAnimationFrame(raf);
+                }
+
+                rafId = requestAnimationFrame(raf);
+                lenisEnabled = true;
+
+                // Cleanup on page unload
+                window.addEventListener('beforeunload', () => {
+                    if (rafId) cancelAnimationFrame(rafId);
+                });
+            } catch (error) {
+                console.warn('Lenis initialization failed, falling back to standard scrolling', error);
+                lenis = null;
+                lenisEnabled = false;
+            }
         }
 
-        requestAnimationFrame(raf);
-
-        // Smooth Scroll for Anchor Links with Lenis
+        // Smooth Scroll for Anchor Links with Lenis or Fallback
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
                 const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
+                if (targetId === '#' || !targetId) return;
                 
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    lenis.scrollTo(targetElement, {
-                        offset: -80,
-                        duration: 1.2,
-                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                    });
+                    e.preventDefault();
+                    
+                    if (lenisEnabled && lenis) {
+                        lenis.scrollTo(targetElement, {
+                            offset: -80,
+                            duration: 1.2,
+                            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                        });
+                    } else {
+                        // Fallback: instant scroll without smooth animation if Lenis fails
+                        targetElement.scrollIntoView({ behavior: 'auto', block: 'start' });
+                    }
                 }
             });
         });
